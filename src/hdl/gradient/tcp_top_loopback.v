@@ -21,60 +21,60 @@ module tcp_top_loopback #(
       )
       (
 
-			  input wire	    aclk,
-			  input wire	    aresetn,
+			  input wire    aclk,
+			  input wire    aresetn,
 
 			  output wire	    m_axis_open_connection_TVALID,
-			  input wire	    m_axis_open_connection_TREADY,
-			  output wire [47:0]     m_axis_open_connection_TDATA,
+			  input  wire 	    m_axis_open_connection_TREADY,
+			  output  wire[47:0]     m_axis_open_connection_TDATA,
 
-			  input wire	    s_axis_open_status_TVALID,
-			  output wire	    s_axis_open_status_TREADY,
-			  input wire [23:0] 	    s_axis_open_status_TDATA,
+			  input  wire 	    s_axis_open_status_TVALID,
+			  output  wire     s_axis_open_status_TREADY,
+			  input  wire[23:0] 	    s_axis_open_status_TDATA,
 
-			  output wire	    m_axis_close_connection_TVALID,
-			  input wire	    m_axis_close_connection_TREADY,
-			  output wire [15:0]     m_axis_close_connection_TDATA,
+			  output  wire 	    m_axis_close_connection_TVALID,
+			  input   wire     m_axis_close_connection_TREADY,
+			  output  wire [15:0]     m_axis_close_connection_TDATA,
 
-			  output wire	    m_axis_listen_port_TVALID,
-			  input wire	    m_axis_listen_port_TREADY,
-			  output wire [15:0]     m_axis_listen_port_TDATA,
+			  output  wire 	    m_axis_listen_port_TVALID,
+			  input  wire    m_axis_listen_port_TREADY,
+			  output  wire [15:0]     m_axis_listen_port_TDATA,
 
-			  input wire	    s_axis_listen_port_status_TVALID,
-			  output wire	    s_axis_listen_port_status_TREADY,
-			  input wire [7:0] 	    s_axis_listen_port_status_TDATA,
+			  input  wire 	    s_axis_listen_port_status_TVALID,
+			  output  wire  s_axis_listen_port_status_TREADY,
+			  input  wire [7:0] 	    s_axis_listen_port_status_TDATA,
 
-			  input wire	    s_axis_notifications_TVALID,
-			  output wire	    s_axis_notifications_TREADY,
-			  input wire [87:0] 	    s_axis_notifications_TDATA,
+			  input  wire 	    s_axis_notifications_TVALID,
+			  output  wire    s_axis_notifications_TREADY,
+			  input  wire [87:0] 	    s_axis_notifications_TDATA,
 
-			  output wire	    m_axis_read_package_TVALID,
-			  input wire	    m_axis_read_package_TREADY,
-			  output wire [31:0]     m_axis_read_package_TDATA,
+			  output  wire     m_axis_read_package_TVALID,
+			  input  wire    m_axis_read_package_TREADY,
+			  output  wire [31:0]     m_axis_read_package_TDATA,
 
-			  output wire	    m_axis_tx_data_TVALID,
-			  input wire	    m_axis_tx_data_TREADY,
-			  output wire [511:0]     m_axis_tx_data_TDATA,
-			  output wire [64:0] 	    m_axis_tx_data_TKEEP,
-			  output wire 	    m_axis_tx_data_TLAST,
+			  output  wire     m_axis_tx_data_TVALID,
+			  input  wire   m_axis_tx_data_TREADY,
+			  output  wire [511:0]     m_axis_tx_data_TDATA,
+			  output  wire [63:0] 	    m_axis_tx_data_TKEEP,
+			  output   wire     m_axis_tx_data_TLAST,
 
-			  output wire 	    m_axis_tx_metadata_TVALID,
-			  input wire	    m_axis_tx_metadata_TREADY,
-			  output wire[15:0] m_axis_tx_metadata_TDATA,
+			  output  reg	    m_axis_tx_metadata_TVALID, //for handshake logic
+			  input  wire     m_axis_tx_metadata_TREADY,
+			  output  reg [31:0] m_axis_tx_metadata_TDATA, //for handshake logic
 
-			  input wire	    s_axis_tx_status_TVALID,
-			  output wire	    s_axis_tx_status_TREADY,
-			  input wire [63:0] 	    s_axis_tx_status_TDATA,
+			  input  wire     s_axis_tx_status_TVALID,
+			  output  wire    s_axis_tx_status_TREADY,
+			  input  wire [63:0] 	    s_axis_tx_status_TDATA,
 
-			  input wire	    s_axis_rx_data_TVALID,
-			  output wire	    s_axis_rx_data_TREADY,
-			  input wire [511:0] 	    s_axis_rx_data_TDATA,
-			  input wire [63:0] 	    s_axis_rx_data_TKEEP,
-			  input wire [0:0] 	    s_axis_rx_data_TLAST,
+			  input  wire 	    s_axis_rx_data_TVALID,
+			  output  wire     s_axis_rx_data_TREADY,
+			  input  wire [511:0] 	    s_axis_rx_data_TDATA,
+			  input  wire [63:0] 	    s_axis_rx_data_TKEEP,
+			  input  wire [0:0] 	    s_axis_rx_data_TLAST,
 
-			  input wire	    s_axis_rx_metadata_TVALID,
-			  output wire	    s_axis_rx_metadata_TREADY,
-			  input wire [15:0] 	    s_axis_rx_metadata_TDATA
+			  input  wire 	    s_axis_rx_metadata_TVALID,
+			  output  wire 	    s_axis_rx_metadata_TREADY,
+			  input  wire [15:0] 	    s_axis_rx_metadata_TDATA
 			  
 			  
 			  
@@ -101,36 +101,37 @@ module tcp_top_loopback #(
    wire [512:0] 				    toAdderData;
    wire 				    toAdderReady;
    
-      wire 				    fromAdderValid;
+   wire 				    fromAdderValid;
    wire [512:0] 				    fromAdderData;
    wire 				    fromAdderReady;
    
    (* mark_debug = "true" *) wire 				    splitPreValid;
    (* mark_debug = "true" *) wire                     splitPreReady;
-   (* mark_debug = "true" *) wire [64+512+1:0]                     splitPreData;   
+   (* mark_debug = "true" *) wire [64+511+1:0]                     splitPreData;   
 
    wire 				    finalOutValid;
    wire                     finalOutReady;
    wire                     finalOutLast;
-   wire [64+512+1:0]                     finalOutData;    
+   wire [64+511+1:0]                     finalOutData;    
 
    wire 				    sesspackValid;
    wire             sesspackMetaValid;
    wire             sesspackReady;
-   wire 				    sesspackMetaReady;
+   //wire 				    sesspackMetaReady;
+   reg                      sesspackMetaReady;
    wire 				    sesspackLast;
    wire [63:0] 				    sesspackData;
    wire [63:0] 				    sesspackMeta;
    
    
-   (* mark_debug = "true" *) wire[511:0] maxis_tx_data;
-   (* mark_debug = "true" *) wire maxis_tx_last;
-   (* mark_debug = "true" *) wire maxis_tx_ready;
-   (* mark_debug = "true" *) wire maxis_tx_valid;
+   //(* mark_debug = "true" *) wire[511:0] maxis_tx_data;
+   //(* mark_debug = "true" *) wire maxis_tx_last;
+   //(* mark_debug = "true" *) wire maxis_tx_ready;
+   //(* mark_debug = "true" *) wire maxis_tx_valid;
    
-   (* mark_debug = "true" *) wire[15:0] maxis_meta_data;   
-   (* mark_debug = "true" *) wire maxis_meta_ready;
-   (* mark_debug = "true" *) wire maxis_meta_valid;
+   //(* mark_debug = "true" *) wire[15:0] maxis_meta_data;   
+   //(* mark_debug = "true" *) wire maxis_meta_ready;
+   //(* mark_debug = "true" *) wire maxis_meta_valid;
  
    
    reg [15:0] myClock;
@@ -202,7 +203,7 @@ module tcp_top_loopback #(
     .rst(reset),
     .rx_data_TVALID(toAdderValid),
     .rx_data_TREADY(toAdderReady),
-    .rx_data_TDATA(toAdderData),
+    .rx_data_TDATA(toAdderData[511:0]),
     .tx_data_TDATA(intData),
     .tx_data_TVALID(intValid),
     .tx_data_TREADY(intReady),
@@ -224,11 +225,10 @@ module tcp_top_loopback #(
     .s_axis_rx_data_TVALID(intValid),
     .s_axis_rx_data_TLAST(intLast), //batch last
     .s_axis_rx_data_TDATA(intData),
-    .batch_gradient_TDATA(fromAdderData[31:0]),
-    .batch_gradient_TVALID(fromAdderValid)
-    //.packet_gradient_TLAST(fromAdderData[512])
+    .batch_gradient_TDATA(fromAdderData[511:0]),
+    .batch_gradient_TVALID(fromAdderValid),
+    .batch_gradient_TLAST(fromAdderData[512])
     );
-  assign fromAdderData[512] = 1'b0;
   //////////////////
   //Adder logic ends
   //////////////////
@@ -269,17 +269,20 @@ module tcp_top_loopback #(
                 ); 
 
 
-    assign splitPreValid = fromAdderValid & sesspackMetaValid;
+    //assign splitPreValid = fromAdderValid & sesspackMetaValid;
+    assign splitPreValid = fromAdderValid;
     assign fromAdderReady = splitPreReady;
-    assign sesspackMetaReady = splitPreReady & fromAdderValid & fromAdderData[512];
+    //assign sesspackMetaReady = splitPreReady & fromAdderValid & fromAdderData[512];
     //assign sesspackMetaReady = splitPreReady & fromAdderValid & fromAdderData[32];
-    assign splitPreData[63+32:0] = {fromAdderData[511:0],sesspackMeta};
+    //assign splitPreData[63+32:0] = {fromAdderData[511:0],sesspackMeta};
+    assign splitPreData[64+511:0] = {fromAdderData[511:0],sesspackMeta};
     //assign splitPreData[63+32:0] = {fromAdderData[31:0],sesspackMeta};
     assign splitPreData[64+512] = fromAdderData[512]; 
+    //assign splitPreData[64+512] = 1'b0;
     //assign splitPreData[64+32] = fromAdderData[32]; // last signal
        
    nukv_fifogen #(
-            .DATA_SIZE(64+511+1),
+            .DATA_SIZE(64+512+1),
             //.DATA_SIZE(64+31+1),
             .ADDR_BITS(6)
         ) fifo_splitprepare (
@@ -296,53 +299,143 @@ module tcp_top_loopback #(
    
    wire ignoreWrites;
    wire ignoreProps;
+   reg[7:0] dataTokens;
 
-   assign   finalOutLast = finalOutData[512+64];
+   assign   finalOutLast = finalOutData[64+512];
    //assign finalOutLast = finalOutData[32+64];
-   assign   maxis_tx_valid = finalOutValid & finalOutReady;
-   assign   maxis_tx_data = finalOutData[511+64:64];
+   //assign   maxis_tx_valid = finalOutValid & finalOutReady;
+  // assign   maxis_tx_data = finalOutData[511+64:64];
   //assign   maxis_tx_data = finalOutData[31+64:64];
-   assign   m_axis_tx_data_TKEEP = 64'hFFFFFFFFFFFFFFFF;
-   assign   maxis_tx_last = finalOutValid & finalOutLast;
+   assign   m_axis_tx_data_TKEEP = 64'hFFFFFFFFFFFFFFFFF;
+   //assign   maxis_tx_last = finalOutValid & finalOutLast;
    
-   assign   finalOutReady = maxis_meta_ready & maxis_tx_ready;
+  //assign   finalOutReady = maxis_meta_ready & maxis_tx_ready;
+   assign   finalOutReady =  dataTokens == 0 ? 0 :  m_axis_tx_data_TREADY; //change how to assign finalOutReady
    
-   assign   maxis_meta_data = finalOutData[15:0];
-   assign   maxis_meta_valid = finalOutValid & finalOutReady & finalOutLast;
+   //assign   maxis_meta_data = finalOutData[15:0];
+   //assign   maxis_meta_valid = finalOutValid & finalOutReady & finalOutLast;
 
-   wire [512:0] m_axis_tx_data_COMBINED;
+   //wire [512:0] m_axis_tx_data_COMBINED;
    //wire [32:0] m_axis_tx_data_COMBINED;
-   nukv_fifogen #(
-                 .DATA_SIZE(512+1),
-                 .ADDR_BITS(8)
-             ) output_net_data_buffer (
-                     .clk(clk),
-                     .rst(reset),
-                     .s_axis_tvalid(maxis_tx_valid),
-                     .s_axis_tready(maxis_tx_ready),
-                     .s_axis_tdata({maxis_tx_last,maxis_tx_data}),  
-                     .m_axis_tvalid(m_axis_tx_data_TVALID),
-                     .m_axis_tready(m_axis_tx_data_TREADY),
-                     .m_axis_tdata(m_axis_tx_data_COMBINED)
-                     ); 
-  assign m_axis_tx_data_TDATA = m_axis_tx_data_COMBINED[511:0];
+//   nukv_fifogen #(
+//                 .DATA_SIZE(512+1),
+//                 .ADDR_BITS(8)
+//             ) output_net_data_buffer (
+//                     .clk(clk),
+//                     .rst(reset),
+//                     .s_axis_tvalid(maxis_tx_valid),
+//                     .s_axis_tready(maxis_tx_ready),
+//                     .s_axis_tdata({maxis_tx_last,maxis_tx_data}),  
+//                     .m_axis_tvalid(m_axis_tx_data_TVALID),
+//                     .m_axis_tready(m_axis_tx_data_TREADY),
+//                     .m_axis_tdata(m_axis_tx_data_COMBINED)
+//                     ); 
+  //assign m_axis_tx_data_TDATA = m_axis_tx_data_COMBINED[511:0];
+  assign m_axis_tx_data_TDATA = finalOutData[512+64:64];
   //assign m_axis_tx_data_TDATA = m_axis_tx_data_COMBINED[31:0];
-  assign m_axis_tx_data_TLAST = m_axis_tx_data_COMBINED[512];     
-  //assign m_axis_tx_data_TLAST = m_axis_tx_data_COMBINED[32];             
+  //assign m_axis_tx_data_TLAST = m_axis_tx_data_COMBINED[512]; 
+  //assign m_axis_tx_data_TLAST = 1'b1;
+  //assign m_axis_tx_data_TLAST = m_axis_tx_data_COMBINED[32];
+  assign m_axis_tx_data_TVALID = finalOutValid & finalOutReady;  
+  assign m_axis_tx_data_TLAST = finalOutValid & finalOutReady;     
                     
-   nukv_fifogen #(
-              .DATA_SIZE(16),
-              .ADDR_BITS(4)
-          ) output_net_meta_buffer (
-                  .clk(clk),
-                  .rst(reset),
-                  .s_axis_tvalid(maxis_meta_valid),
-                  .s_axis_tready(maxis_meta_ready),
-                  .s_axis_tdata(maxis_meta_data),  
-                  .m_axis_tvalid(m_axis_tx_metadata_TVALID),
-                  .m_axis_tready(m_axis_tx_metadata_TREADY),
-                  .m_axis_tdata(m_axis_tx_metadata_TDATA)
-                  ); 
+  ////////////handshake logic start////////////////////////////////
+  ///////Send meta data first wait for reply of status/////////////
+  //////////////////////Then send data packet//////////////////////
+  ////////////finalOutData --> store all data//////////////////////
+  ////////sesspackMetaData --> store all meta data/////////////////
+  
+  
+  //wire out_meta_valid;  //sesspackMetaValid
+  //reg out_meta_ready; //sesspackMetaReady
+  reg[7:0] waitingForStatusWord;
+  reg waitingForFirstPacket;
+  //wire [15:0] out_meta_data; //sesspackMeta
+  reg killNext;
+  reg killThis;
+   always @(posedge aclk) begin
+      if(reset) begin
+        m_axis_tx_metadata_TDATA <= 0;
+        m_axis_tx_metadata_TVALID <= 0;
+        sesspackMetaReady <= 0;      
+        waitingForStatusWord <= 0; 
+        waitingForFirstPacket <= 1;
+        dataTokens <= 0;
+        killThis <= 0;
+        killNext <= 0;
+      end else begin
+
+        if (finalOutValid==1) begin //The meta + data queue is ready, the first packet is ready
+          waitingForFirstPacket <= 0; 
+        end
+        
+        if (m_axis_tx_metadata_TREADY==1 && m_axis_tx_metadata_TVALID==1) begin //Input, ready for accepting the next metadata, Output the next metadata is valid
+          m_axis_tx_metadata_TVALID <= 0;  //waiting for outputing next meta data
+        end
+
+        if (sesspackMetaReady ==1 && sesspackMetaValid==1) begin // Process meatadata input
+           sesspackMetaReady <= 0;
+        end 
+
+        if (finalOutValid==1 && finalOutReady==1 && finalOutLast==1) begin //The last line of the session
+          dataTokens <= dataTokens-1;
+        end
+
+        if (finalOutValid==1 && finalOutReady==1 && finalOutLast==1) begin  //move to the next session
+            killThis <= killNext;       
+            killNext <= 0; 
+        end
+
+        if (waitingForStatusWord==0 &&  sesspackMetaReady ==0 && killNext==0) begin //send the metadata stage
+
+          if (m_axis_tx_metadata_TREADY==1) begin
+            m_axis_tx_metadata_TVALID <= sesspackMetaValid; 
+            m_axis_tx_metadata_TDATA <= {16'h64, sesspackMeta[15:0]};
+
+            if (sesspackMetaValid==1) begin
+              waitingForStatusWord <= waitingForStatusWord+1;
+            end
+          end
+
+        end else if (waitingForStatusWord==1 &&  sesspackMetaReady ==0 && killNext==0) begin //get the reply of status 
+
+          if (s_axis_tx_status_TVALID==1) begin
+            waitingForStatusWord <= waitingForStatusWord-1;
+
+            if (s_axis_tx_status_TDATA[63:62]==0 || s_axis_tx_status_TDATA[63:62]==1) begin
+              // no error   or no connection (1)
+               sesspackMetaReady <= 1;
+              dataTokens <= dataTokens+1;
+
+              if (finalOutValid==1 && finalOutReady==1 && finalOutLast==1) begin
+                dataTokens <= dataTokens;
+              end              
+
+              if (s_axis_tx_status_TDATA[63:62]==1) begin
+                killNext <= 1;      
+              end
+
+            end
+          end
+
+        end
+
+      end
+    end
+  ////////////handshake logic end///////////////////////////////////
+//   nukv_fifogen #(
+//              .DATA_SIZE(16),
+//              .ADDR_BITS(4)
+//          ) output_net_meta_buffer (
+//                  .clk(clk),
+//                  .rst(reset),
+//                  .s_axis_tvalid(maxis_meta_valid),
+//                  .s_axis_tready(maxis_meta_ready),
+//                  .s_axis_tdata(maxis_meta_data),  
+//                  .m_axis_tvalid(m_axis_tx_metadata_TVALID),
+//                  .m_axis_tready(m_axis_tx_metadata_TREADY),
+//                  .m_axis_tdata(m_axis_tx_metadata_TDATA)
+//                  ); 
 
 
 

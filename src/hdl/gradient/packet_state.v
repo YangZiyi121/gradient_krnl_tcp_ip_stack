@@ -64,10 +64,12 @@ module packet_state(
                 waitingState:
                 begin
                     if (rx_data_TVALID == 1 && tx_data_TREADY == 1) begin
+                        //N_cur = rx_data_TDATA[511:480]; //get the N
                         N_cur = rx_data_TDATA[31:0]; //get the N
                         remainder = (N_cur + 1) % 16;
                         lineNum = (remainder == 0)?((N_cur + 1) - remainder) / 16:(((N_cur + 1) - remainder) / 16)+1; //calculate line number
-                        tx_data_TDATA_reg <= {32'b0, rx_data_TDATA[479:0]};  
+                        //tx_data_TDATA_reg <= {32'b0, rx_data_TDATA[479:0]};  
+                        tx_data_TDATA_reg <= {rx_data_TDATA[511:32], 32'b0};  
                         tx_data_TVALID_reg <= rx_data_TVALID;
                         if (lineNum == 1) begin    //end of the batch
                            st <= waitingState;
